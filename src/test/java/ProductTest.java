@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 import src.Product;
+import src.ProductList;
+
 import java.util.ArrayList;
 
 import static src.Product.*;
@@ -8,6 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static src.ProductList.deserializeProductList;
 
 public class ProductTest {
+  @Test
+  public void serializeProduct_whenAProductIsValid_shouldReturnAString() {
+    var productString =
+        "\nProduct{\n"
+            + "%%quantity%%#2#,\n"
+            + "%%name%%#soap#,\n"
+            + "%%price%%#0.99#,\n"
+            + "%%isPurchased%%#true#}}";
+
+    var product = new Product(2, "soap", 0.99, true);
+    assertEquals(productString, serializeProduct(product));
+  }
+
   @Test
   public void deserializeProduct_whenAStringIsValid_shouldReturnAProduct() {
 
@@ -33,9 +48,9 @@ public class ProductTest {
   }
 
   @Test
-  public void serializeProductList_whenAListIsValid_shouldReturnAString() {
+  public void serializeListOfProducts_whenAListIsValid_shouldReturnAString() {
     var productString =
-        "Product{\n"
+        "\nProduct{\n"
             + "%%quantity%%#2#,\n"
             + "%%name%%#soap#,\n"
             + "%%price%%#0.99#,\n"
@@ -43,30 +58,24 @@ public class ProductTest {
     var product = new Product(2, "soap", 0.99, true);
     var productList = new ArrayList<Product>();
     productList.add(product);
-    var serializedProduct = serializeProductList(productList);
+    var serializedProduct = serializeListOfProducts(productList);
     assertEquals(productString, serializedProduct);
   }
 
+
+
   @Test
-  public void deserializeProductList_whenAStringIsValid_shouldReturnAProductList() {
-    String str =
-        "ProductList{\n"
-            + "$$name$$#Shopping#,\n"
-            + "$$listOfProducts$$#\n"
-            + "Product{\n"
-            + "%%quantity%%#1#,\n"
-            + "%%name%%#soda#,\n"
-            + "%%price%%#2.23#,\n"
-            + "%%isPurchased%%#true#}}#}}";
-    ArrayList<Product> products = new ArrayList<>();
-    products.add(new Product(1, "soda", 2.23, true));
-    assertEquals("Shopping", deserializeProductList(str).getName());
-    var deserializedList = deserializeProductList(str).getListOfProducts();
-    for (int i = 0; i < products.size(); i++) {
-      assertEquals(products.get(i).getQuantity(), deserializedList.get(i).getQuantity());
-      assertEquals(products.get(i).getName(), deserializedList.get(i).getName());
-      assertEquals(products.get(i).getPrice(), deserializedList.get(i).getPrice());
-      assertEquals(products.get(i).getPurchased(), deserializedList.get(i).getPurchased());
+  public void deserializeListOfProducts_whenAListIsValid_shouldReturnAProduct(){
+    var product = new Product(5, "computer \n last generation $$i5$$ ", 4567.99, false);
+    var productList = new ArrayList<Product>();
+    productList.add(product);
+    var serialized = serializeListOfProducts(productList);
+    for(int i = 0; i < productList.size(); i++){
+      assertEquals(product.getQuantity(), deserializeListsOfProducts(serialized).get(i).getQuantity());
+      assertEquals(product.getName(), deserializeListsOfProducts(serialized).get(i).getName());
+      assertEquals(product.getPrice(), deserializeListsOfProducts(serialized).get(i).getPrice());
+      assertEquals(product.getPurchased(), deserializeListsOfProducts(serialized).get(i).getPurchased());
+
     }
   }
 }

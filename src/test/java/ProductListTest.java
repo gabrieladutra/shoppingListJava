@@ -4,28 +4,15 @@ import src.Product;
 import src.ProductList;
 import java.util.ArrayList;
 
-import static src.Product.deserializeProduct;
+import static src.Product.*;
 import static src.ProductList.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductListTest {
-  @Test
-  public void deserializeProduct_whenAStringIsValid_shouldReturnAProduct() {
-    String product =
-        "%%quantity%%#1#,\n"
-            + "%%name%%#monitor#,\n"
-            + "%%price%%#300.0#,\n"
-            + "%%isPurchased%%#false#}}";
-    Product p1 = deserializeProduct(product);
-    assertEquals(1, p1.getQuantity());
-    assertEquals("monitor", p1.getName());
-    assertEquals(300d, p1.getPrice());
-    assertEquals(false, p1.getPurchased());
-  }
 
   @Test
-  public void serializeProductList_whenAProductListIsValid_ShouldReturnAString() {
+  public void serializeProductList_whenAProductListIsValid_shouldReturnAString() {
     var productListStr =
         "ProductList{\n"
             + "$$name$$#Shopping#,\n"
@@ -44,17 +31,17 @@ public class ProductListTest {
   }
 
   @Test
-  public void serializeProductList_whenAProductIsNull_ShouldReturnAnException() {
+  public void serializeProductList_whenAProductIsNull_shouldReturnAnException() {
     assertThrows(IllegalArgumentException.class, () -> serializeProductList(null));
   }
 
   @Test
-  public void deserializeProductList_whenAStringIsEmpty_ShouldThrowAnException() {
+  public void deserializeProductList_whenAStringIsEmpty_shouldThrowAnException() {
     assertThrows(IllegalArgumentException.class, () -> deserializeProductList(""));
   }
 
   @Test
-  public void deserializeProductList_whenAStringIsNull_ShouldReturnAnException() {
+  public void deserializeProductList_whenAStringIsNull_shouldReturnAnException() {
     assertThrows(IllegalArgumentException.class, () -> deserializeProductList(null));
   }
 
@@ -90,7 +77,7 @@ public class ProductListTest {
     products.add(secondProduct);
     var productList = new ProductList("Monthly Shopping", products);
     var serialized = serializeProductList(productList);
-    assertEquals("Shopping", deserializeProductList(serialized).getName());
+    assertEquals("Monthly Shopping", deserializeProductList(serialized).getName());
     var deserializedList = deserializeProductList(serialized).getListOfProducts();
     for (int i = 0; i < products.size(); i++) {
       assertEquals(products.get(i).getQuantity(), deserializedList.get(i).getQuantity());
@@ -99,4 +86,65 @@ public class ProductListTest {
       assertEquals(products.get(i).getPurchased(), deserializedList.get(i).getPurchased());
     }
   }
+
+  @Test
+  public void serialize_whenAProductLisIsValid_shouldReturnAString() {
+    var listsOfProductsStr =
+        "ProductList{\n"
+            + "$$name$$#weekly#,\n"
+            + "$$listOfProducts$$#\n"
+            + "Product{\n"
+            + "%%quantity%%#1#,\n"
+            + "%%name%%#pen#,\n"
+            + "%%price%%#1.0#,\n"
+            + "%%isPurchased%%#false#}}\n"
+            + "Product{\n"
+            + "%%quantity%%#2#,\n"
+            + "%%name%%#notebook#,\n"
+            + "%%price%%#1234.0#,\n"
+            + "%%isPurchased%%#true#}}#}}ProductList{\n"
+            + "$$name$$#every month and week#,\n"
+            + "$$listOfProducts$$#\n"
+            + "Product{\n"
+            + "%%quantity%%#1#,\n"
+            + "%%name%%#pen#,\n"
+            + "%%price%%#1.0#,\n"
+            + "%%isPurchased%%#false#}}\n"
+            + "Product{\n"
+            + "%%quantity%%#2#,\n"
+            + "%%name%%#notebook#,\n"
+            + "%%price%%#1234.0#,\n"
+            + "%%isPurchased%%#true#}}#}}";
+    var array = new ArrayList<Product>();
+    array.add(new Product(1, "pen", 1d, false));
+    array.add(new Product(2, "notebook", 1234d, true));
+    ArrayList<ProductList> list = new ArrayList<>();
+    var list2 = new ProductList("every month and week", array);
+    list.add(new ProductList("weekly", array));
+    list.add(list2);
+    assertEquals(listsOfProductsStr, serialize(list));
+  }
+   @Test
+  public void deserialize_whenAStringIsNull_shouldThrowAnException(){
+    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(null));
+   }
+   @Test
+  public void deserialize_whenAStringIsEmpty_shouldThrowAnException(){
+    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(""));
+   }
+
+   @Test
+  public void deserialize_whenAStringIsValid_shouldReturnAListOfProductList(){
+    var firstProduct = new Product(4,"Book", 234d,false);
+     var secondProduct = new Product(4,"Magazine", 4d,true);
+    var productArrayList = new ArrayList<Product>();
+    productArrayList.add(firstProduct);
+    productArrayList.add(secondProduct);
+    var productList = new ProductList("january",productArrayList);
+     var productList2 = new ProductList("february",productArrayList);
+    var listOfProductList = new ArrayList<ProductList>();
+    listOfProductList.add(productList);
+    listOfProductList.add(productList2);
+    var serialized = serialize(listOfProductList);
+   }
 }

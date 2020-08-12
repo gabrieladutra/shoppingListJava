@@ -20,6 +20,7 @@ public class Product implements java.io.Serializable {
     return name.replace("\n", "").replace("%%", "").replace("}}", "");
   }
 
+
   public int getQuantity() {
     return quantity;
   }
@@ -72,6 +73,8 @@ public class Product implements java.io.Serializable {
         + "}}";
   }
 
+
+
   public static Product deserializeProduct(String productString) {
     int quantity = 0;
     String name = "";
@@ -92,8 +95,7 @@ public class Product implements java.io.Serializable {
     }
     return new Product(quantity, name, price, isPurchased);
   }
-
-  public static String serializeProductList(ArrayList<Product> productList) {
+  public static String serializeListOfProducts(ArrayList<Product> productList) {
     String[] stringList = new String[productList.size()];
     StringBuilder productString = new StringBuilder();
     for (int i = 0; i < productList.size(); i++) {
@@ -103,7 +105,7 @@ public class Product implements java.io.Serializable {
     return productString.toString();
   }
 
-  public static ArrayList<Product> deserializeProductList(String productString) {
+  public static ArrayList<Product> deserializeListsOfProducts(String productString) {
     String[] splitString = productString.split("}}");
     ArrayList<Product> productList = new ArrayList<>();
     for (String s : splitString) {
@@ -112,7 +114,6 @@ public class Product implements java.io.Serializable {
     }
     return productList;
   }
-
   public static void main(String[] args) {
     var product = new Product(2, "soap", 0.99, true);
     System.out.println(serializeProduct(product));
