@@ -1,47 +1,64 @@
 package src;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import static src.Product.*;
-
+import static src.Product.deserializeProduct;
 
 public class ProductList {
-    private final String name;
-    private ArrayList<Product> listOfProducts;
+  private final String name;
+  private final ArrayList<Product> listOfProducts;
 
+  public ProductList(String name, ArrayList<Product> listOfProducts) {
+    this.name = sanitizeString(name);
+    this.listOfProducts = listOfProducts;
+  }
 
-    public ProductList(String name, ArrayList<Product> listOfProducts) {
-        this.name = name;
-        this.listOfProducts = new ArrayList<>();
+  public String getName() {
+    return name;
+  }
+
+  private static String sanitizeString(String name) {
+    return name.replace("\n", "").replace("$$", "").replace("}}", "");
+  }
+
+  public ArrayList<Product> getListOfProducts() {
+    return listOfProducts;
+  }
+
+  public static String serializeProductList(ProductList productList) {
+    if (productList == null) {
+      throw new IllegalArgumentException("ProductList of argument is null");
     }
+    return "ProductList{"
+        + "\n$$name$$"
+        + "#"
+        + productList.getName()
+        + "#"
+        + ",\n$$listOfProducts$$"
+        + "#"
+        + Product.serializeProductList(productList.listOfProducts)
+        + "#"
+        + "}}";
+  }
 
-    public String getName() {
-        return name;
+  public static ProductList deserializeProductList(String productListString) {
+    if (productListString == null || productListString.equals("")) {
+      throw new IllegalArgumentException("String of argument is null or empty");
     }
-
-    public ArrayList<Product> getListOfProducts() {
-        return listOfProducts;
+    String[] splitString = productListString.split("Product\\{");
+    String[] names = splitString[0].substring("ProductList{\n $$name$$".length()).split("#,\n");
+    String name = names[0];
+    Product product;
+    var listOfProduct = new ArrayList<Product>();
+    for (int i = 1; i < splitString.length; i++) {
+      product = deserializeProduct(splitString[i]);
+      listOfProduct.add(product);
     }
+    return new ProductList(name, listOfProduct);
+  }
 
-    public String serializeProductList() {
-        String[] stringList = new String[listOfProducts.size()];
-        String productString = "";
-        for (int i = 0; i < listOfProducts.size(); i++) {
-            stringList[i] = serializeProduct(listOfProducts.get(i));
-            productString += stringList[i];
-        }
-        return productString;
-
-    }
-    public  ArrayList<Product> deserializeProductList(String productString){
-        String[] splitString = productString.split("}}");
-        for(int i = 0; i < splitString.length;i++){
-            Product deserializeProduct = deserializeProduct(splitString[i]);
-            listOfProducts.add(deserializeProduct);
-        }
-        return listOfProducts;
-    }
-
-
+  @Override
+  public String toString() {
+    return "ProductList{" + "name='" + name + '\'' + ", listOfProducts=" + listOfProducts + '}';
+  }
 }
