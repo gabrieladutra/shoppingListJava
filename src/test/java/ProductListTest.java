@@ -21,7 +21,7 @@ public class ProductListTest {
             + "%%quantity%%#11#,\n"
             + "%%name%%#Ink#,\n"
             + "%%price%%#44.55#,\n"
-            + "%%isPurchased%%#true#}}#}}";
+            + "%%isPurchased%%#true#}}#}}\n";
 
     var product = new Product(11, "Ink", 44.55, true);
     var list = new ArrayList<Product>();
@@ -102,7 +102,8 @@ public class ProductListTest {
             + "%%quantity%%#2#,\n"
             + "%%name%%#notebook#,\n"
             + "%%price%%#1234.0#,\n"
-            + "%%isPurchased%%#true#}}#}}ProductList{\n"
+            + "%%isPurchased%%#true#}}#}}\n"
+            + "ProductList{\n"
             + "$$name$$#every month and week#,\n"
             + "$$listOfProducts$$#\n"
             + "Product{\n"
@@ -114,7 +115,7 @@ public class ProductListTest {
             + "%%quantity%%#2#,\n"
             + "%%name%%#notebook#,\n"
             + "%%price%%#1234.0#,\n"
-            + "%%isPurchased%%#true#}}#}}";
+            + "%%isPurchased%%#true#}}#}}\n";
     var array = new ArrayList<Product>();
     array.add(new Product(1, "pen", 1d, false));
     array.add(new Product(2, "notebook", 1234d, true));
@@ -124,27 +125,40 @@ public class ProductListTest {
     list.add(list2);
     assertEquals(listsOfProductsStr, serialize(list));
   }
-   @Test
-  public void deserialize_whenAStringIsNull_shouldThrowAnException(){
-    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(null));
-   }
-   @Test
-  public void deserialize_whenAStringIsEmpty_shouldThrowAnException(){
-    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(""));
-   }
 
-   @Test
-  public void deserialize_whenAStringIsValid_shouldReturnAListOfProductList(){
-    var firstProduct = new Product(4,"Book", 234d,false);
-     var secondProduct = new Product(4,"Magazine", 4d,true);
+  @Test
+  public void deserialize_whenAStringIsNull_shouldThrowAnException() {
+    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(null));
+  }
+
+  @Test
+  public void deserialize_whenAStringIsEmpty_shouldThrowAnException() {
+    assertThrows(IllegalArgumentException.class, () -> deserializeProductList(""));
+  }
+
+  @Test
+  public void deserialize_whenAStringIsValid_shouldReturnAListOfProductList() {
+
+    var firstProduct = new Product(4, "Book", 234d, false);
+    var secondProduct = new Product(4, "Magazine", 4d, true);
+
     var productArrayList = new ArrayList<Product>();
     productArrayList.add(firstProduct);
     productArrayList.add(secondProduct);
-    var productList = new ProductList("january",productArrayList);
-     var productList2 = new ProductList("february",productArrayList);
+
+    var productList = new ProductList("january", productArrayList);
+    var productList2 = new ProductList("february", productArrayList);
+
     var listOfProductList = new ArrayList<ProductList>();
     listOfProductList.add(productList);
     listOfProductList.add(productList2);
+
     var serialized = serialize(listOfProductList);
-   }
+    var deserialized = deserialize(serialized);
+    assertEquals("january", deserialized.get(0).getName());
+    assertEquals(4, deserialized.get(0).getListOfProducts().get(0).getQuantity());
+    assertEquals("Book", deserialized.get(0).getListOfProducts().get(0).getName());
+    assertEquals(234d, deserialized.get(0).getListOfProducts().get(0).getPrice());
+    assertEquals(false, deserialized.get(0).getListOfProducts().get(0).getPurchased());
+  }
 }

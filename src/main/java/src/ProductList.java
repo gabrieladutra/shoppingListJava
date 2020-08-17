@@ -38,7 +38,7 @@ public class ProductList {
         + "#"
         + Product.serializeListOfProducts(productList.listOfProducts)
         + "#"
-        + "}}";
+        + "}}\n";
   }
 
   public static String serialize(ArrayList<ProductList> productLists) {
@@ -53,9 +53,15 @@ public class ProductList {
     }
     return productString.toString();
   }
-
-  public static ArrayList<Product> deserialize(String productString) {
-    return Product.deserializeListsOfProducts(productString);
+  //
+  public static ArrayList<ProductList> deserialize(String productString) {
+    ArrayList<ProductList> list = new ArrayList<>();
+    var split = productString.split("#}}#}}\n");
+    for (int i = 0; i < split.length; i++) {
+      var productList = deserializeProductList(split[i]);
+      list.add(productList);
+    }
+    return list;
   }
 
   public static ProductList deserializeProductList(String productListString) {
@@ -82,9 +88,11 @@ public class ProductList {
   public static void main(String[] args) {
     var array = new ArrayList<Product>();
     array.add(new Product(1, "pen", 1d, false));
+    array.add(new Product(2, "mouse", 80d, true));
+    array.add(new Product(3, "watch", 900d, true));
     ArrayList<ProductList> list = new ArrayList<>();
-   var list2 = new ProductList("semanalmente por todos os meses",array);
-    list.add(new ProductList("weekly",array));
+    var list2 = new ProductList("semanalmente", array);
+    list.add(new ProductList("weekly", array));
     list.add(list2);
     System.out.println(serialize(list));
     System.out.println(deserialize(serialize(list)));

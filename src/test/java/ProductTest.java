@@ -62,20 +62,18 @@ public class ProductTest {
     assertEquals(productString, serializedProduct);
   }
 
-
-
   @Test
-  public void deserializeListOfProducts_whenAListIsValid_shouldReturnAProduct(){
+  public void deserializeListOfProducts_whenAListIsValid_shouldReturnAProduct() {
     var product = new Product(5, "computer \n last generation $$i5$$ ", 4567.99, false);
     var productList = new ArrayList<Product>();
     productList.add(product);
     var serialized = serializeListOfProducts(productList);
-    for(int i = 0; i < productList.size(); i++){
+    for (int i = 0; i < productList.size(); i++) {
       assertEquals(product.getQuantity(), deserializeListsOfProducts(serialized).get(i).getQuantity());
       assertEquals(product.getName(), deserializeListsOfProducts(serialized).get(i).getName());
       assertEquals(product.getPrice(), deserializeListsOfProducts(serialized).get(i).getPrice());
-      assertEquals(product.getPurchased(), deserializeListsOfProducts(serialized).get(i).getPurchased());
-
+      assertEquals(
+          product.getPurchased(), deserializeListsOfProducts(serialized).get(i).getPurchased());
     }
   }
 }
