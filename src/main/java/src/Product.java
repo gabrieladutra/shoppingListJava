@@ -2,7 +2,7 @@ package src;
 
 import java.util.ArrayList;
 
-public class Product implements java.io.Serializable {
+public class Product {
   private final Integer quantity;
   private final String name;
   private final Double price;
@@ -11,12 +11,12 @@ public class Product implements java.io.Serializable {
   public Product(int quantity, String name, Double price, Boolean isPurchased) {
 
     this.quantity = quantity;
-    this.name = sanitizeString(name);
+    this.name = sanitizeName(name);
     this.price = price;
     this.isPurchased = isPurchased;
   }
 
-  private static String sanitizeString(String name) {
+  private static String sanitizeName(String name) {
     return name.replace("\n", "").replace("%%", "").replace("}}", "");
   }
 
@@ -111,10 +111,5 @@ public class Product implements java.io.Serializable {
       productList.add(deserializeProduct);
     }
     return productList;
-  }
-
-  public static void main(String[] args) {
-    var product = new Product(2, "soap", 0.99, true);
-    System.out.println(serializeProduct(product));
   }
 }
