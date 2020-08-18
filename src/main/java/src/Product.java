@@ -51,7 +51,7 @@ public class Product {
         + '}';
   }
 
-  public static String serializeProduct(Product product) {
+  public String serializeProduct(Product product) {
     return "\nProduct{"
         + "\n%%quantity%%"
         + "#"
@@ -75,7 +75,7 @@ public class Product {
   public static Product deserializeProduct(String productString) {
     int quantity = 0;
     String name = "";
-    double price = 0d;
+    double price = 0;
     boolean isPurchased = false;
     String[] splitString = productString.split("\n");
     for (int i = 0; i < splitString.length; i++) {
@@ -93,11 +93,11 @@ public class Product {
     return new Product(quantity, name, price, isPurchased);
   }
 
-  public static String serializeListOfProducts(ArrayList<Product> productList) {
+  public String serializeListOfProducts(ArrayList<Product> productList) {
     String[] stringList = new String[productList.size()];
     StringBuilder productString = new StringBuilder();
     for (int i = 0; i < productList.size(); i++) {
-      stringList[i] = serializeProduct(productList.get(i));
+      stringList[i] = productList.get(i).serializeProduct(productList.get(i));
       productString.append(stringList[i]);
     }
     return productString.toString();

@@ -1,10 +1,8 @@
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import src.Product;
 import src.ProductList;
 import java.util.ArrayList;
 
-import static src.Product.*;
 import static src.ProductList.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -123,7 +121,7 @@ public class ProductListTest {
     var list2 = new ProductList("every month and week", array);
     list.add(new ProductList("weekly", array));
     list.add(list2);
-    assertEquals(listsOfProductsStr, serialize(list));
+    assertEquals(listsOfProductsStr, serializeListOfProductList(list));
   }
 
   @Test
@@ -153,8 +151,8 @@ public class ProductListTest {
     listOfProductList.add(productList);
     listOfProductList.add(productList2);
 
-    var serialized = serialize(listOfProductList);
-    var deserialized = deserialize(serialized);
+    var serialized = serializeListOfProductList(listOfProductList);
+    var deserialized = deserializeListOfProductList(serialized);
     assertEquals("january", deserialized.get(0).getName());
     assertEquals(4, deserialized.get(0).getListOfProducts().get(0).getQuantity());
     assertEquals("Book", deserialized.get(0).getListOfProducts().get(0).getName());

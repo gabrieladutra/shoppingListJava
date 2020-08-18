@@ -9,7 +9,7 @@ public class ProductList {
   private final ArrayList<Product> listOfProducts;
 
   public ProductList(String name, ArrayList<Product> listOfProducts) {
-    this.name = sanitizeString(name);
+    this.name = sanitizeName(name);
     this.listOfProducts = listOfProducts;
   }
 
@@ -17,7 +17,7 @@ public class ProductList {
     return name;
   }
 
-  private static String sanitizeString(String name) {
+  private static String sanitizeName(String name) {
     return name.replace("\n", "").replace("$$", "").replace("}}", "");
   }
 
@@ -29,6 +29,7 @@ public class ProductList {
     if (productList == null) {
       throw new IllegalArgumentException("ProductList of argument is null");
     }
+    Product product = new Product(0, "", 0d, false);
     return "ProductList{"
         + "\n$$name$$"
         + "#"
@@ -36,25 +37,24 @@ public class ProductList {
         + "#"
         + ",\n$$listOfProducts$$"
         + "#"
-        + Product.serializeListOfProducts(productList.listOfProducts)
+        + product.serializeListOfProducts(productList.listOfProducts)
         + "#"
         + "}}\n";
   }
 
-  public static String serialize(ArrayList<ProductList> productLists) {
+  public static String serializeListOfProductList(ArrayList<ProductList> productLists) {
     if (productLists == null) {
       throw new IllegalArgumentException("ProductList Array of  argument is null");
     }
     String[] stringList = new String[productLists.size()];
     StringBuilder productString = new StringBuilder();
     for (int i = 0; i < productLists.size(); i++) {
-      stringList[i] = serializeProductList(productLists.get(i));
-      productString.append(stringList[i]);
+      productString.append(serializeProductList(productLists.get(i)));
     }
     return productString.toString();
   }
-  //
-  public static ArrayList<ProductList> deserialize(String productString) {
+
+  public static ArrayList<ProductList> deserializeListOfProductList(String productString) {
     ArrayList<ProductList> list = new ArrayList<>();
     var split = productString.split("#}}#}}\n");
     for (int i = 0; i < split.length; i++) {
@@ -83,18 +83,5 @@ public class ProductList {
   @Override
   public String toString() {
     return "ProductList{" + "name='" + name + '\'' + ", listOfProducts=" + listOfProducts + '}';
-  }
-
-  public static void main(String[] args) {
-    var array = new ArrayList<Product>();
-    array.add(new Product(1, "pen", 1d, false));
-    array.add(new Product(2, "mouse", 80d, true));
-    array.add(new Product(3, "watch", 900d, true));
-    ArrayList<ProductList> list = new ArrayList<>();
-    var list2 = new ProductList("semanalmente", array);
-    list.add(new ProductList("weekly", array));
-    list.add(list2);
-    System.out.println(serialize(list));
-    System.out.println(deserialize(serialize(list)));
   }
 }
