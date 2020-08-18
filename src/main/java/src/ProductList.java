@@ -46,10 +46,10 @@ public class ProductList {
     if (productLists == null) {
       throw new IllegalArgumentException("ProductList Array of  argument is null");
     }
-    String[] stringList = new String[productLists.size()];
+
     StringBuilder productString = new StringBuilder();
-    for (int i = 0; i < productLists.size(); i++) {
-      productString.append(serializeProductList(productLists.get(i)));
+    for (ProductList productList : productLists) {
+      productString.append(serializeProductList(productList));
     }
     return productString.toString();
   }
@@ -57,8 +57,8 @@ public class ProductList {
   public static ArrayList<ProductList> deserializeListOfProductList(String productString) {
     ArrayList<ProductList> list = new ArrayList<>();
     var split = productString.split("#}}#}}\n");
-    for (int i = 0; i < split.length; i++) {
-      var productList = deserializeProductList(split[i]);
+    for (String s : split) {
+      var productList = deserializeProductList(s);
       list.add(productList);
     }
     return list;
