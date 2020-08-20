@@ -1,3 +1,5 @@
+package src;
+
 import org.junit.jupiter.api.Test;
 import src.Product;
 import src.ProductList;

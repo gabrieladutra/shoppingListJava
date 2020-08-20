@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Product {
   private final Integer quantity;
-  private final String name;
-  private final Double price;
+  private String name;
+  private Double price;
   private final Boolean isPurchased;
 
   public Product(int quantity, String name, Double price, Boolean isPurchased) {
@@ -34,6 +34,16 @@ public class Product {
 
   public Boolean getPurchased() {
     return isPurchased;
+  }
+
+  public void setName(String newName){
+
+    name = newName;
+  }
+
+  public void setPrice (Double newPrice){
+
+    price = newPrice;
   }
 
   @Override
