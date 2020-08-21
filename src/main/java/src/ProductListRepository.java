@@ -4,7 +4,6 @@ import java.io.*;
 
 import java.util.ArrayList;
 
-import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
@@ -13,9 +12,9 @@ import static src.ProductList.serializeListOfProductList;
 
 public class ProductListRepository {
     private static ProductListRepository repositoryInstance;
-    private final ArrayList<ProductList> products = readProductList();
+    private final ArrayList<ProductList> productsLists = readProductList();
 
-    public ProductListRepository() {
+    private ProductListRepository() {
 
     }
 
@@ -38,7 +37,7 @@ public class ProductListRepository {
     private void writeProductList() {
         try (
                 FileWriter myWriter = new FileWriter("allProducts.gbd")) {
-            var serialized = serializeListOfProductList(products);
+            var serialized = serializeListOfProductList(productsLists);
             myWriter.write(serialized);
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -53,15 +52,15 @@ public class ProductListRepository {
         return repositoryInstance;
     }
 
-    public void add(ProductList productList)  {
-        products.add(productList);
+    public void add(ProductList productList) {
+        productsLists.add(productList);
         writeProductList();
 
     }
 
 
     public ProductList getItem(String name) {
-        for (ProductList currentObject : products) {
+        for (ProductList currentObject : productsLists) {
             if (currentObject.getName().contains(name)) {
                 return currentObject;
             }
@@ -70,40 +69,29 @@ public class ProductListRepository {
     }
 
     public Integer getSize() {
-        return products.size();
+        return productsLists.size();
 
     }
 
-    public ProductList getProductList(String id){
-        for (ProductList productList : products) {
+    public ProductList getProductList(String id) {
+        for (ProductList productList : productsLists) {
             if (productList.getId().equals(id)) {
                 return productList;
             }
         }
         throw new IllegalArgumentException("Product List id not found");
     }
-    public void updateProducts(ProductList updatedProductList){
-        for (ProductList currentProducts : products) {
-            if (currentProducts.getId().equals(updatedProductList.getId())) {
-                currentProducts = updatedProductList;
+
+    public void updateProductsLists(ProductList updatedProductList) {
+        for (var i = 0; i < productsLists.size(); i++) {
+            var currentProductList = productsLists.get(i);
+            if (currentProductList.getId().equals(updatedProductList.getId())) {
+                productsLists.set(i, updatedProductList);
                 writeProductList();
+                return;
             }
         }
         throw new IllegalArgumentException("Product List not found");
-    }
-
-    public void alterListName(String id) {
-        for (ProductList currentProduct : products) {
-            if (currentProduct.getId().equals(id)) {
-                Menu menu = new Menu();
-                System.out.println("Name" + "[" + currentProduct.getName() + "] = ");
-                String name = menu.readString();
-                if (!name.equals("")) {
-                    currentProduct.setName(name);
-                }
-            }
-        }
-        writeProductList();
     }
 
 }

@@ -1,22 +1,30 @@
 package src;
 
 public class ProductListServices {
-    Menu menu = new Menu();
-    public void alterProductListName() {
-        System.out.println("List Id: ");
-        String id  = menu.readString();
-        ProductListRepository.getInstance().alterListName(id);
+    private final Menu menu = new Menu();
+    private final ProductListRepository repository = ProductListRepository.getInstance();
+
+    public void alterProductListName(String id, String name) {
+      var productList = repository.getProductList(id);
+      productList.setName(name);
+      repository.updateProductsLists(productList);
     }
 
-    public void deleteProduct(String id, String productName){
-        var repository = ProductListRepository.getInstance();
+    public void deleteProduct(String id, String productName) {
         var productList = repository.getProductList(id);
         productList.deleteProduct(productName);
-        repository.updateProducts(productList);
+        repository.updateProductsLists(productList);
     }
 
-    public void addProduct(String id){
-        var repository = ProductListRepository.getInstance();
+    public void addProduct(String id, Product product) {
         var productList = repository.getProductList(id);
+        productList.addProduct(product);
+        repository.updateProductsLists(productList);
     }
+
+    public void addProductList(String name) {
+        var newProductList = new ProductList(name);
+        repository.add(newProductList);
+    }
+
 }

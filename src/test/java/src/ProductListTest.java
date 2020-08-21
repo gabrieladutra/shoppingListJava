@@ -1,8 +1,6 @@
 package src;
 
 import org.junit.jupiter.api.Test;
-import src.Product;
-import src.ProductList;
 
 import java.util.ArrayList;
 
@@ -12,28 +10,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductListTest {
 
-//    @Test
-//    public void serializeProductList_whenAProductListIsValid_shouldReturnAString() {
-//
-//
-//        var product = new Product(11, "Ink", 44.55, true);
-//        var list = new ArrayList<Product>();
-//        list.add(product);
-//        var productList = new ProductList("Shopping", list);
-//      var deserialized = deserializeProductList(productListStr);
-//        var productListStr =
-//               "ProductList{\n" +
-//                       "$$id$$#" + deserializeProductList(serialized).getId() + "#\n" +
-//                       "$$name$$#Shopping#,\n" +
-//                       "$$listOfProducts$$#\n" +
-//                       "Product{\n" +
-//                       "%%quantity%%#11#,\n" +
-//                       "%%name%%#Ink#,\n" +
-//                       "%%price%%#44.55#,\n" +
-//                       "%%isPurchased%%#true#}}#}}";
-//
-//        assertEquals(productListStr, serialized);
-//    }
+    @Test
+    public void serializeProductList_whenAProductListIsValid_shouldReturnAString() {
+        var product = new Product(11, "Ink", 44.55, true);
+        var list = new ArrayList<Product>();
+        list.add(product);
+        var productList = new ProductList("Shopping", list);
+
+        var productListStr =
+                "ProductList{\n" +
+                        "$$name$$#Shopping#,\n" +
+                        "$$id$$#" + productList.getId() + "#,\n" +
+                        "$$listOfProducts$$#\n" +
+                        "Product{\n" +
+                        "%%quantity%%#11#,\n" +
+                        "%%name%%#Ink#,\n" +
+                        "%%price%%#44.55#,\n" +
+                        "%%isPurchased%%#true#}}#}}";
+
+        assertEquals(productListStr, serializeProductList(productList));
+    }
 
     @Test
     public void serializeProductList_whenAProductIsNull_shouldReturnAnException() {
@@ -55,9 +51,6 @@ public class ProductListTest {
         var products = new ArrayList<Product>();
         products.add(new Product(1, "soda", 2.23, true));
         var productList = new ProductList("Shopping", products);
-        var listOfProductList = new ArrayList<ProductList>();
-        listOfProductList.add(productList);
-
         String str =
                 "ProductList{\n"
                         + "$$name$$#Shopping#,\n"
@@ -70,14 +63,13 @@ public class ProductListTest {
                         + "%%isPurchased%%#true#}}#}}";
         assertEquals("Shopping", deserializeProductList(str).getName());
         assertEquals(productList.getId(), deserializeProductList(str).getId());
-//      assertEquals(, deserializeProductList(str).getId());
-//        var deserializedList = deserializeProductList(str).getListOfProducts();
-//        for (int i = 0; i < products.size(); i++) {
-//            assertEquals(products.get(i).getQuantity(), deserializedList.get(i).getQuantity());
-//            assertEquals(products.get(i).getName(), deserializedList.get(i).getName());
-//            assertEquals(products.get(i).getPrice(), deserializedList.get(i).getPrice());
-//            assertEquals(products.get(i).getPurchased(), deserializedList.get(i).getPurchased());
-//        }
+        var deserializedList = deserializeProductList(str).getProducts();
+        for (int i = 0; i < products.size(); i++) {
+            assertEquals(products.get(i).getQuantity(), deserializedList.get(i).getQuantity());
+            assertEquals(products.get(i).getName(), deserializedList.get(i).getName());
+            assertEquals(products.get(i).getPrice(), deserializedList.get(i).getPrice());
+            assertEquals(products.get(i).getPurchased(), deserializedList.get(i).getPurchased());
+        }
     }
 
     @Test
@@ -90,7 +82,7 @@ public class ProductListTest {
         var productList = new ProductList("Monthly Shopping", products);
         var serialized = serializeProductList(productList);
         assertEquals("Monthly Shopping", deserializeProductList(serialized).getName());
-        var deserializedList = deserializeProductList(serialized).getListOfProducts();
+        var deserializedList = deserializeProductList(serialized).getProducts();
         for (int i = 0; i < products.size(); i++) {
             assertEquals(products.get(i).getQuantity(), deserializedList.get(i).getQuantity());
             assertEquals(products.get(i).getName(), deserializedList.get(i).getName());
@@ -172,14 +164,14 @@ public class ProductListTest {
         var serialized = serializeListOfProductList(listOfProductList);
         var deserialized = deserializeListOfProductList(serialized);
         assertEquals("january", deserialized.get(0).getName());
-        assertEquals(4, deserialized.get(0).getListOfProducts().get(0).getQuantity());
-        assertEquals("Book", deserialized.get(0).getListOfProducts().get(0).getName());
-        assertEquals(234d, deserialized.get(0).getListOfProducts().get(0).getPrice());
-        assertEquals(false, deserialized.get(0).getListOfProducts().get(0).getPurchased());
+        assertEquals(4, deserialized.get(0).getProducts().get(0).getQuantity());
+        assertEquals("Book", deserialized.get(0).getProducts().get(0).getName());
+        assertEquals(234d, deserialized.get(0).getProducts().get(0).getPrice());
+        assertEquals(false, deserialized.get(0).getProducts().get(0).getPurchased());
     }
 
     @Test
-    public void deleteProduct_whenProductNameIsValid_shouldDeleteAProduct(){
+    public void deleteProduct_whenProductNameIsValid_shouldDeleteAProduct() {
 
         var firstProduct = new Product(4, "Book", 234d, false);
         var secondProduct = new Product(4, "Magazine", 4d, true);
@@ -192,10 +184,48 @@ public class ProductListTest {
 
         productList.deleteProduct("Magazine");
 
-        for(Product currentProduct : productArrayList){
-            if(currentProduct.getName().equals("Magazine")){
+        for (Product currentProduct : productArrayList) {
+            if (currentProduct.getName().equals("Magazine")) {
                 fail("Product not deleted");
             }
         }
     }
+
+    @Test
+    public void addProduct_whenProductNameIsValid_shouldAddAProduct() {
+        var productToAdd = new Product(4, "Magazine", 4d, true);
+        var productList = new ProductList("january");
+
+        productList.addProduct(productToAdd);
+
+        for (Product currentProduct : productList.getProducts()) {
+            if (currentProduct.getName().equals("Magazine")) {
+                assertEquals(productToAdd, currentProduct);
+                return;
+            }
+        }
+        fail("Product not added");
+    }
+
+    @Test
+    public void alterListName_whenProductNameIsValid_shouldAlterProductListName() {
+        var productList = new ProductList("january");
+        productList.setName("new name");
+        assertEquals("new name", productList.getName());
+
+    }
+
+    @Test
+    public void alterListName_whenProductNameIsNull_shouldThrowAnException() {
+        var productList = new ProductList("list");
+        assertThrows(IllegalArgumentException.class, () -> productList.setName(null));
+    }
+
+    @Test
+    public void alterListName_whenProductNameIsEmpty_shouldThrowAnException() {
+        var productList = new ProductList("list");
+        assertThrows(IllegalArgumentException.class, () -> productList.setName(""));
+    }
+
+
 }

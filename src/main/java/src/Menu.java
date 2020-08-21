@@ -12,10 +12,10 @@ public class Menu {
         System.out.println("2- Search a List");
         System.out.println("3- Edit a List");
         System.out.println("4- Delete a List");
-        System.out.println("5- Recover 3 more accessible lists");
-        System.out.println("6- Add a Product in a List");
+        System.out.println("5- Add a Product in a List");
+        System.out.println("6- Edit a product in a List");
         System.out.println("7- Delete a Product in a List");
-        System.out.println("8- Edit a product in a List");
+        System.out.println("8- Recover 3 more accessible lists");
     }
 
     public Integer readOption() {

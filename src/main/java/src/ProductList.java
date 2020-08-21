@@ -16,6 +16,12 @@ public class ProductList {
         this.listOfProducts = listOfProducts;
     }
 
+    public ProductList(String name) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.listOfProducts = new ArrayList<>();
+    }
+
     private ProductList(String name, String id, ArrayList<Product> listOfProducts) {
         if (id == null) {
             throw new IllegalArgumentException("The id is null");
@@ -34,6 +40,9 @@ public class ProductList {
     }
 
     public void setName(String newName) {
+        if(newName == null || newName.equals("")){
+            throw new IllegalArgumentException("Name is empty or null");
+        }
 
         name = newName;
     }
@@ -43,7 +52,7 @@ public class ProductList {
         return name.replace("\n", "").replace("$$", "").replace("}}", "");
     }
 
-    public ArrayList<Product> getListOfProducts() {
+    public ArrayList<Product> getProducts() {
         return listOfProducts;
     }
 
@@ -118,5 +127,9 @@ public class ProductList {
             }
         }
         throw new IllegalArgumentException("product not found");
+    }
+
+    public void addProduct(Product product) {
+        listOfProducts.add(product);
     }
 }
