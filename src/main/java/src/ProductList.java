@@ -7,12 +7,21 @@ import static src.Product.*;
 
 public class ProductList {
     private String name;
-    private String id;
+    private final String id;
     private final ArrayList<Product> listOfProducts;
 
     public ProductList(String name, ArrayList<Product> listOfProducts) {
         this.id = UUID.randomUUID().toString();
         this.name = sanitizeName(name);
+        this.listOfProducts = listOfProducts;
+    }
+
+    private ProductList(String name, String id, ArrayList<Product> listOfProducts) {
+        if (id == null) {
+            throw new IllegalArgumentException("The id is null");
+        }
+        this.name = sanitizeName(name);
+        this.id = id;
         this.listOfProducts = listOfProducts;
     }
 
@@ -48,6 +57,8 @@ public class ProductList {
                 + "#"
                 + productList.getName()
                 + "#"
+                + ",\n$$id$$#"
+                + productList.getId() + "#"
                 + ",\n$$listOfProducts$$"
                 + "#"
                 + product.serializeListOfProducts(productList.listOfProducts)
@@ -82,19 +93,30 @@ public class ProductList {
             throw new IllegalArgumentException("String of argument is null or empty");
         }
         String[] splitString = productListString.split("Product\\{");
-        String[] names = splitString[0].substring("ProductList{\n $$name$$".length()).split("#,\n");
-        String name = names[0];
+        var productListProperty = splitString[0].substring("ProductList{\n $$name$$".length()).split("#,\n");
+        String name = productListProperty[0];
+        String id = productListProperty[1].substring("$$id$$#".length());
         Product product;
         var listOfProduct = new ArrayList<Product>();
         for (int i = 1; i < splitString.length; i++) {
             product = deserializeProduct(splitString[i]);
             listOfProduct.add(product);
         }
-        return new ProductList(name, listOfProduct);
+        return new ProductList(name, id, listOfProduct);
     }
 
     @Override
     public String toString() {
         return "ProductList{" + "name='" + name + '\'' + ", listOfProducts=" + listOfProducts + '}';
+    }
+
+    public void deleteProduct(String productName) {
+        for (Product currentProduct : listOfProducts) {
+            if (currentProduct.getName().equals(productName)) {
+                listOfProducts.remove(currentProduct);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("product not found");
     }
 }

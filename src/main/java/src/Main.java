@@ -24,6 +24,12 @@ public class Main {
                 case 3:
                     services.alterProductListName();
                     break;
+
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    services.deleteProduct("","");
             }
         }
     }

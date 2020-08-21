@@ -20,7 +20,6 @@ public class ProductListRepository {
     }
 
     private ArrayList<ProductList> readProductList() {
-
         File productsFile = new File("allProducts.gbd");
         try (Scanner reader = new Scanner(productsFile)) {
             StringJoiner allFile = new StringJoiner("\n");
@@ -36,10 +35,10 @@ public class ProductListRepository {
         }
     }
 
-    private void writeProductList(ArrayList<ProductList> productList) {
+    private void writeProductList() {
         try (
                 FileWriter myWriter = new FileWriter("allProducts.gbd")) {
-            var serialized = serializeListOfProductList(productList);
+            var serialized = serializeListOfProductList(products);
             myWriter.write(serialized);
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -54,15 +53,12 @@ public class ProductListRepository {
         return repositoryInstance;
     }
 
-    public void add(ProductList productList) throws IOException {
+    public void add(ProductList productList)  {
         products.add(productList);
-        writeProductList(products);
+        writeProductList();
 
     }
 
-    public List<ProductList> getProductList() {
-        return products;
-    }
 
     public ProductList getItem(String name) {
         for (ProductList currentObject : products) {
@@ -78,20 +74,25 @@ public class ProductListRepository {
 
     }
 
-    public ArrayList<ProductList> getMany(){
-        return products;
-    }
-
-    public void delete(String name) {
-        for (int i = 0; i < products.size(); i++) {
-            ProductList currentProduct = products.get(i);
-            if (currentProduct.getName().equals(name))
-                products.remove(currentProduct);
+    public ProductList getProductList(String id){
+        for (ProductList productList : products) {
+            if (productList.getId().equals(id)) {
+                return productList;
+            }
         }
-        writeProductList(products);
+        throw new IllegalArgumentException("Product List id not found");
+    }
+    public void updateProducts(ProductList updatedProductList){
+        for (ProductList currentProducts : products) {
+            if (currentProducts.getId().equals(updatedProductList.getId())) {
+                currentProducts = updatedProductList;
+                writeProductList();
+            }
+        }
+        throw new IllegalArgumentException("Product List not found");
     }
 
-    public void alterListName(Integer id) {
+    public void alterListName(String id) {
         for (ProductList currentProduct : products) {
             if (currentProduct.getId().equals(id)) {
                 Menu menu = new Menu();
@@ -102,7 +103,7 @@ public class ProductListRepository {
                 }
             }
         }
-        writeProductList(products);
+        writeProductList();
     }
 
 }
