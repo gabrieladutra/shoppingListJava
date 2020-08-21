@@ -58,40 +58,26 @@ public class ProductListRepository {
 
     }
 
-
-    public ProductList getItem(String name) {
-        for (ProductList currentObject : productsLists) {
-            if (currentObject.getName().contains(name)) {
-                return currentObject;
-            }
-        }
-        return null;
-    }
-
-    public Integer getSize() {
-        return productsLists.size();
-
-    }
-
     public ProductList getProductList(String id) {
-        for (ProductList productList : productsLists) {
-            if (productList.getId().equals(id)) {
-                return productList;
-            }
-        }
-        throw new IllegalArgumentException("Product List id not found");
+        return productsLists.get(getIndexOfProductList(id));
     }
 
     public void updateProductsLists(ProductList updatedProductList) {
-        for (var i = 0; i < productsLists.size(); i++) {
-            var currentProductList = productsLists.get(i);
-            if (currentProductList.getId().equals(updatedProductList.getId())) {
-                productsLists.set(i, updatedProductList);
-                writeProductList();
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Product List not found");
+        productsLists.set(getIndexOfProductList(updatedProductList.getId()), updatedProductList);
+        writeProductList();
     }
 
+    public void deleteProductList(String id) {
+        productsLists.remove(getIndexOfProductList(id));
+        writeProductList();
+    }
+
+    private int getIndexOfProductList(String id) {
+        for (int i = 0; i < productsLists.size(); i++) {
+            if (productsLists.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Product List id :" + id + "not found");
+    }
 }

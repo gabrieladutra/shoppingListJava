@@ -26,7 +26,7 @@ public class ProductListTest {
                         "%%quantity%%#11#,\n" +
                         "%%name%%#Ink#,\n" +
                         "%%price%%#44.55#,\n" +
-                        "%%isPurchased%%#true#}}#}}";
+                        "%%isPurchased%%#true#}}#}}\n";
 
         assertEquals(productListStr, serializeProductList(productList));
     }
@@ -172,20 +172,28 @@ public class ProductListTest {
 
     @Test
     public void deleteProduct_whenProductNameIsValid_shouldDeleteAProduct() {
-
-        var firstProduct = new Product(4, "Book", 234d, false);
-        var secondProduct = new Product(4, "Magazine", 4d, true);
-
+        var productToDelete = new Product(4, "Magazine", 4d, true);
         var productArrayList = new ArrayList<Product>();
-        productArrayList.add(firstProduct);
-        productArrayList.add(secondProduct);
-
+        productArrayList.add(productToDelete);
         var productList = new ProductList("january", productArrayList);
 
         productList.deleteProduct("Magazine");
 
         for (Product currentProduct : productArrayList) {
             if (currentProduct.getName().equals("Magazine")) {
+                fail("Product not deleted");
+            }
+        }
+    }
+
+    @Test
+    public void deleteProductList_whenProductListIsValid_shouldDeleteAProductList() {
+        var productList = new ProductList("my shops");
+        var productsLists = new ArrayList<ProductList>();
+        productsLists.add(productList);
+        ProductListRepository.getInstance().deleteProductList(productList.getId());
+        for (ProductList currentProduct : productsLists) {
+            if (currentProduct.getName().equals("my shops")) {
                 fail("Product not deleted");
             }
         }

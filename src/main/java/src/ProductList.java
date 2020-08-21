@@ -132,4 +132,5 @@ public class ProductList {
     public void addProduct(Product product) {
         listOfProducts.add(product);
     }
+
 }
