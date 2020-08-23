@@ -3,10 +3,10 @@ package src;
 import java.util.ArrayList;
 
 public class Product {
-  private final Integer quantity;
+  private Integer quantity;
   private String name;
   private Double price;
-  private final Boolean isPurchased;
+  private Boolean isPurchased;
 
   public Product(int quantity, String name, Double price, Boolean isPurchased) {
 
@@ -36,6 +36,10 @@ public class Product {
     return isPurchased;
   }
 
+  public void setQuantity(Integer newQuantity){
+    quantity = newQuantity;
+  }
+
   public void setName(String newName){
 
     name = newName;
@@ -44,6 +48,10 @@ public class Product {
   public void setPrice (Double newPrice){
 
     price = newPrice;
+  }
+
+  public void setIsPurchased(boolean newIsPurchased){
+    isPurchased = newIsPurchased;
   }
 
   @Override

@@ -27,6 +27,16 @@ public class ProductListServices {
         repository.add(newProductList);
     }
 
+    public void findProductList(String id){
+        repository.getProductList(id);
+    }
+
+    public void editProduct(String id, String name, Product product){
+        var productList = repository.getProductList(id);
+        productList.editProduct(name,product);
+        repository.updateProductsLists(productList);
+    }
+
 
 
 }

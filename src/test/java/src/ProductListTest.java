@@ -188,12 +188,14 @@ public class ProductListTest {
 
     @Test
     public void deleteProductList_whenProductListIsValid_shouldDeleteAProductList() {
+        var productToDelete = new Product(1, "pizza", 20.00,true);
         var productList = new ProductList("my shops");
-        var productsLists = new ArrayList<ProductList>();
-        productsLists.add(productList);
-        ProductListRepository.getInstance().deleteProductList(productList.getId());
-        for (ProductList currentProduct : productsLists) {
-            if (currentProduct.getName().equals("my shops")) {
+        productList.addProduct(productToDelete);
+
+        productList.deleteProduct(productToDelete.getName());
+
+        for (Product currentProduct : productList.getProducts()) {
+            if (currentProduct.getName().equals(productToDelete.getName())) {
                 fail("Product not deleted");
             }
         }
@@ -233,6 +235,21 @@ public class ProductListTest {
     public void alterListName_whenProductNameIsEmpty_shouldThrowAnException() {
         var productList = new ProductList("list");
         assertThrows(IllegalArgumentException.class, () -> productList.setName(""));
+    }
+
+    @Test
+    public void editProduct_whenProductNameIsValid_shouldThrowAnException(){
+        var product = new Product(1, "tomato", 0.90, true);
+        var productToEdit = new Product(2, "salad", 1.00, false);
+        var productList = new ProductList("list");
+        productList.addProduct(productToEdit);
+
+        productList.editProduct("tomato", product);
+        var editedProduct = productList.getProduct(productToEdit.getName());
+        assertEquals(productToEdit.getQuantity(), editedProduct.getQuantity());
+        assertEquals(productToEdit.getName(),editedProduct.getName());
+        assertEquals(productToEdit.getPrice(), editedProduct.getPrice());
+        assertEquals(productToEdit.getPurchased(), editedProduct.getPurchased());
     }
 
 

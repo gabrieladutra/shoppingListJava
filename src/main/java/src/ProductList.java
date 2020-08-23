@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static src.Product.*;
+import static src.Validator.*;
 
 public class ProductList {
     private String name;
@@ -40,7 +41,7 @@ public class ProductList {
     }
 
     public void setName(String newName) {
-        if(newName == null || newName.equals("")){
+        if (newName == null || newName.equals("")) {
             throw new IllegalArgumentException("Name is empty or null");
         }
 
@@ -98,9 +99,7 @@ public class ProductList {
     }
 
     public static ProductList deserializeProductList(String productListString) {
-        if (productListString == null || productListString.equals("")) {
-            throw new IllegalArgumentException("String of argument is null or empty");
-        }
+        validateStringNullOrBlank(productListString);
         String[] splitString = productListString.split("Product\\{");
         var productListProperty = splitString[0].substring("ProductList{\n $$name$$".length()).split("#,\n");
         String name = productListProperty[0];
@@ -120,17 +119,28 @@ public class ProductList {
     }
 
     public void deleteProduct(String productName) {
-        for (Product currentProduct : listOfProducts) {
-            if (currentProduct.getName().equals(productName)) {
-                listOfProducts.remove(currentProduct);
-                return;
-            }
-        }
-        throw new IllegalArgumentException("product not found");
+        listOfProducts.remove(getProduct(productName));
     }
 
     public void addProduct(Product product) {
         listOfProducts.add(product);
+    }
+
+    public void editProduct(String name, Product newProduct) {
+        for (int i = 0; i < listOfProducts.size(); i++) {
+            if (listOfProducts.get(i).getName().equals(name)) {
+                listOfProducts.set(i, newProduct);
+            }
+        }
+    }
+
+    public Product getProduct(String name) {
+        for (Product product : listOfProducts) {
+            if (product.getName().equals(name)) {
+                return product;
+            }
+        }
+        throw new IllegalArgumentException("Product not found");
     }
 
 }
