@@ -1,14 +1,15 @@
 package src;
 
 import java.util.List;
+
 public class ProductListServices {
     private final Menu menu = new Menu();
     private final ProductListRepository repository = ProductListRepository.getInstance();
 
     public void alterProductListName(String id, String name) {
-      var productList = repository.getProductList(id);
-      productList.setName(name);
-      repository.updateProductsLists(productList);
+        var productList = repository.getProductList(id);
+        productList.setName(name);
+        repository.updateProductsLists(productList);
     }
 
     public void deleteProduct(String id, String productName) {
@@ -28,17 +29,19 @@ public class ProductListServices {
         repository.add(newProductList);
     }
 
-    public void findProductList(String id){
-        repository.getProductList(id);
+    public ProductList findProductList(String id) {
+        return repository.getProductList(id);
     }
 
-    public void editProduct(String id, String name, Product product){
+    public void editProduct(String id, String name, Product product) {
         var productList = repository.getProductList(id);
-        productList.editProduct(name,product);
+        productList.editProduct(name, product);
         repository.updateProductsLists(productList);
     }
 
     public List<ProductList> searchProductList(String name) {
+        return repository.searchProductList(name);
+    }
 
 
 }
