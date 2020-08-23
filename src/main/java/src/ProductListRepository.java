@@ -4,6 +4,7 @@ import java.io.*;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
@@ -80,5 +81,15 @@ public class ProductListRepository {
             }
         }
         throw new IllegalArgumentException("Product List id :" + id + "not found");
+    }
+
+    public List<ProductList> searchProductList(String name){
+        var searchedLists = new ArrayList<ProductList>();
+        for(ProductList list : productsLists){
+            if(list.getName().contains(name)){
+                searchedLists.add(list);
+            }
+        }
+        return  searchedLists;
     }
 }

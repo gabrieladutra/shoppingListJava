@@ -1,5 +1,6 @@
 package src;
 
+import java.util.List;
 public class ProductListServices {
     private final Menu menu = new Menu();
     private final ProductListRepository repository = ProductListRepository.getInstance();
@@ -37,6 +38,7 @@ public class ProductListServices {
         repository.updateProductsLists(productList);
     }
 
+    public List<ProductList> searchProductList(String name) {
 
 
 }
