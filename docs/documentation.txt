@@ -1,0 +1,65 @@
+﻿Requisição HTTP
+
+
+feature: Editar um produto
+resource-address:  /list/:id:/Product/:nome:
+verb: Put
+body:   .json Product
+query-string: 
+header:
+content-type: application/json
+
+
+feature: Deletar um produto
+resource-address:  /list/:Id:/Product/:nome:
+verb: Delete
+body:   
+query-string: 
+header :
+content-type : 
+
+
+feature: Adicionar um produto a uma lista
+resource-address:  /list/:idDaLista:/Product
+verb: Post
+body:   .json Product
+query-string: 
+header :
+content-type : application/json
+
+
+
+
+feature: Delete an list
+resource-address:  /list/:Id:
+verb: Delete
+body:
+QueryString:
+content-type
+
+
+feature: create a list
+resource-address:  /list
+verb: Post
+body: .json ProductList
+header:
+content-type : application/json
+
+
+
+
+feature: edit a list name
+resource-address:  /list/:id:/:name
+verb: Patch
+body: .json ProductList
+header:
+content-type : application/json
+
+
+feature: Search a list 
+resource-address:  /list/:id:
+verb: Get
+body: .json ProductList
+header:
+query-string : 
+content-type : application/json
