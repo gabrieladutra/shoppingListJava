@@ -29,6 +29,7 @@ public class ProductListRepository {
                 String nextLine = reader.nextLine();
                 allFile.add(nextLine);
             }
+            String fileContent = allFile.toString();
             return deserializeListOfProductList(allFile.toString());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
