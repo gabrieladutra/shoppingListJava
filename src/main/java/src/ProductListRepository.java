@@ -1,5 +1,7 @@
 package src;
 
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 
 import java.util.ArrayList;
@@ -11,13 +13,9 @@ import java.util.StringJoiner;
 import static src.ProductList.deserializeListOfProductList;
 import static src.ProductList.serializeListOfProductList;
 
+@Component
 public class ProductListRepository {
-    private static ProductListRepository repositoryInstance;
     private final ArrayList<ProductList> productsLists = readProductList();
-
-    private ProductListRepository() {
-
-    }
 
     private ArrayList<ProductList> readProductList() {
         File productsFile = new File("allProducts.gbd");
@@ -30,6 +28,9 @@ public class ProductListRepository {
                 allFile.add(nextLine);
             }
             String fileContent = allFile.toString();
+            if (fileContent.isBlank()) {
+                return new ArrayList<ProductList>();
+            }
             return deserializeListOfProductList(allFile.toString());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -47,12 +48,6 @@ public class ProductListRepository {
         }
     }
 
-    public static ProductListRepository getInstance() {
-        if (repositoryInstance == null) {
-            repositoryInstance = new ProductListRepository();
-        }
-        return repositoryInstance;
-    }
 
     public void add(ProductList productList) {
         productsLists.add(productList);
@@ -84,13 +79,13 @@ public class ProductListRepository {
         throw new IllegalArgumentException("Product List id :" + id + "not found");
     }
 
-    public List<ProductList> searchProductList(String name){
+    public List<ProductList> searchProductList(String name) {
         var searchedLists = new ArrayList<ProductList>();
-        for(ProductList list : productsLists){
-            if(list.getName().contains(name)){
+        for (ProductList list : productsLists) {
+            if (list.getName().contains(name)) {
                 searchedLists.add(list);
             }
         }
-        return  searchedLists;
+        return searchedLists;
     }
 }

@@ -1,10 +1,16 @@
 package src;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class ProductListServices {
-    private final Menu menu = new Menu();
-    private final ProductListRepository repository = ProductListRepository.getInstance();
+    private final ProductListRepository repository;
+
+    public ProductListServices(ProductListRepository repository) {
+        this.repository = repository;
+    }
 
     public void alterProductListName(String id, String name) {
         var productList = repository.getProductList(id);

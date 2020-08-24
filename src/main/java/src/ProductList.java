@@ -12,22 +12,18 @@ public class ProductList {
     private final ArrayList<Product> listOfProducts;
 
     public ProductList(String name, ArrayList<Product> listOfProducts) {
-        this.id = UUID.randomUUID().toString();
-        this.name = sanitizeName(name);
-        this.listOfProducts = listOfProducts;
+        this(name, UUID.randomUUID().toString(), listOfProducts);
     }
 
     public ProductList(String name) {
-        this.id = UUID.randomUUID().toString();
-        this.name = name;
-        this.listOfProducts = new ArrayList<>();
+        this(name, new ArrayList<>());
     }
 
     private ProductList(String name, String id, ArrayList<Product> listOfProducts) {
         if (id == null) {
             throw new NullOrEmptyArgumentException(id);
         }
-        this.name = sanitizeName(name);
+        setName(name);
         this.id = id;
         this.listOfProducts = listOfProducts;
     }
@@ -41,11 +37,9 @@ public class ProductList {
     }
 
     public void setName(String newName) {
-        if (newName == null || newName.equals("")) {
-            throw new NullOrEmptyArgumentException(newName);
-        }
-
-        name = newName;
+        var sanitizedName = sanitizeName(newName);
+        validateStringNullOrBlank(sanitizedName);
+        name = sanitizedName;
     }
 
 
