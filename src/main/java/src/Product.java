@@ -1,7 +1,7 @@
 package src;
 
 import java.util.ArrayList;
-
+import static src.Validator.*;
 public class Product {
   private Integer quantity;
   private String name;
@@ -9,7 +9,7 @@ public class Product {
   private Boolean isPurchased;
 
   public Product(int quantity, String name, Double price, Boolean isPurchased) {
-
+    validateNumberIsPositive(quantity);
     this.quantity = quantity;
     this.name = sanitizeName(name);
     this.price = price;

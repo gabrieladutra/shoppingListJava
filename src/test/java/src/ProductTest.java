@@ -8,6 +8,11 @@ import static src.Product.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductTest {
+
+    @Test
+    public void constructor_whenAQuantityIsNegative_shouldThrowException(){
+        assertThrows(IllegalArgumentException.class, () ->new Product(-1, "salad", 1.00, false));
+    }
     @Test
     public void serializeProduct_whenAProductIsValid_shouldReturnAString() {
         var productString =
