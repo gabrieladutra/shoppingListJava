@@ -37,9 +37,8 @@ public class ProductList {
     }
 
     public void setName(String newName) {
-        var sanitizedName = sanitizeName(newName);
-        validateStringNullOrBlank(sanitizedName);
-        name = sanitizedName;
+        validateStringNullOrBlank(newName);
+        name = sanitizeName(newName);
     }
 
 
