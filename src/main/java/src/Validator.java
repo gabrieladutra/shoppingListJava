@@ -4,7 +4,7 @@ public class Validator {
 
     public static void validateStringNullOrBlank(String paramString) {
         if (paramString == null || paramString.isBlank()) {
-            throw new IllegalArgumentException("String of parameter is null or empty");
+            throw new NullOrEmptyArgumentException(paramString);
         }
     }
 

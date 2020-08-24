@@ -136,12 +136,12 @@ public class ProductListTest {
 
     @Test
     public void deserialize_whenAStringIsNull_shouldThrowAnException() {
-        assertThrows(IllegalArgumentException.class, () -> deserializeProductList(null));
+        assertThrows(NullOrEmptyArgumentException.class, () -> deserializeProductList(null));
     }
 
     @Test
     public void deserialize_whenAStringIsEmpty_shouldThrowAnException() {
-        assertThrows(IllegalArgumentException.class, () -> deserializeProductList(""));
+        assertThrows(NullOrEmptyArgumentException.class, () -> deserializeProductList(""));
     }
 
     @Test
@@ -228,13 +228,13 @@ public class ProductListTest {
     @Test
     public void alterListName_whenProductNameIsNull_shouldThrowAnException() {
         var productList = new ProductList("list");
-        assertThrows(IllegalArgumentException.class, () -> productList.setName(null));
+        assertThrows(NullOrEmptyArgumentException.class, () -> productList.setName(null));
     }
 
     @Test
     public void alterListName_whenProductNameIsEmpty_shouldThrowAnException() {
         var productList = new ProductList("list");
-        assertThrows(IllegalArgumentException.class, () -> productList.setName(""));
+        assertThrows(NullOrEmptyArgumentException.class, () -> productList.setName(""));
     }
 
     @Test

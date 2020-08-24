@@ -25,7 +25,7 @@ public class ProductList {
 
     private ProductList(String name, String id, ArrayList<Product> listOfProducts) {
         if (id == null) {
-            throw new IllegalArgumentException("The id is null");
+            throw new NullOrEmptyArgumentException(id);
         }
         this.name = sanitizeName(name);
         this.id = id;
@@ -42,7 +42,7 @@ public class ProductList {
 
     public void setName(String newName) {
         if (newName == null || newName.equals("")) {
-            throw new IllegalArgumentException("Name is empty or null");
+            throw new NullOrEmptyArgumentException(newName);
         }
 
         name = newName;
