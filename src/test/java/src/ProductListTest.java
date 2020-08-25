@@ -3,6 +3,7 @@ package src;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static src.ProductList.*;
 
@@ -26,7 +27,7 @@ public class ProductListTest {
                         "%%quantity%%#11#,\n" +
                         "%%name%%#Ink#,\n" +
                         "%%price%%#44.55#,\n" +
-                        "%%isPurchased%%#true#}}#}}\n";
+                        "%%isPurchased%%#true#}}#}}#}}\n";
 
         assertEquals(productListStr, serializeProductList(productList));
     }
@@ -116,7 +117,7 @@ public class ProductListTest {
                         "%%quantity%%#2#,\n" +
                         "%%name%%#notebook#,\n" +
                         "%%price%%#1234.0#,\n" +
-                        "%%isPurchased%%#true#}}#}}\n" +
+                        "%%isPurchased%%#true#}}#}}#}}\n" +
                         "ProductList{\n" +
                         "$$name$$#every month and week#,\n" +
                         "$$id$$#" + listOfProductList.get(1).getId() + "#,\n" +
@@ -130,7 +131,7 @@ public class ProductListTest {
                         "%%quantity%%#2#,\n" +
                         "%%name%%#notebook#,\n" +
                         "%%price%%#1234.0#,\n" +
-                        "%%isPurchased%%#true#}}#}}\n";
+                        "%%isPurchased%%#true#}}#}}#}}\n";
         assertEquals(listsOfProductsStr, serialized);
     }
 
@@ -250,6 +251,20 @@ public class ProductListTest {
         assertEquals(productToEdit.getName(),editedProduct.getName());
         assertEquals(productToEdit.getPrice(), editedProduct.getPrice());
         assertEquals(productToEdit.getPurchased(), editedProduct.getPurchased());
+    }
+
+    @Test
+    public void deserializeProductList_whenAStringIsValid_shouldReturnAProductList(){
+        var firstProduct = new Product(2, "beans", 2.00, false);
+        var secondProduct = new Product(3, "pasta", 1.00, false);
+
+        var products = new ArrayList<Product>();
+        products.add(firstProduct);
+        products.add(secondProduct);
+
+        var firstProductList = new ProductList("my list",products);
+        var serializedProductList
+
     }
 
 

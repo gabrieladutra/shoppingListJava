@@ -65,8 +65,8 @@ public class ProductList {
                 + ",\n$$listOfProducts$$"
                 + "#"
                 + product.serializeListOfProducts(productList.listOfProducts)
-                + "#"
-                + "}}\n";
+                +"#}}"
+                + "#}}\n";
     }
 
     public static String serializeListOfProductList(ArrayList<ProductList> productLists) {
