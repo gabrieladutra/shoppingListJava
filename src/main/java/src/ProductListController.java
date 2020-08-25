@@ -1,10 +1,7 @@
 package src;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductListController {
@@ -29,14 +26,14 @@ public class ProductListController {
         return ResponseEntity.ok("The list was successfully created!");
     }
 
-    @DeleteMapping("/list/id")
-    public  ResponseEntity<String> deleteList(@RequestBody ProductListDeletionRequest productList){
+    @DeleteMapping("/list/{id}")
+    public ResponseEntity<String> deleteList(@PathVariable("id") String id){
         try {
-            Validator.validateStringNullOrBlank(productList.id);
+            Validator.validateStringNullOrBlank(id);
         } catch (NullOrEmptyArgumentException exception) {
             return ResponseEntity.badRequest().body("The list name is null or empty");
         }
-        repository.deleteProductList(productList.id);
+        repository.deleteProductList(id);
         return ResponseEntity.ok("The list was successfully deleted!");
     }
 
