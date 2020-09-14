@@ -3,7 +3,10 @@ package src;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductListController {
     private final ProductListServices services;
     private final ProductListRepository repository;
@@ -14,14 +17,13 @@ public class ProductListController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<String> createList(@RequestBody ProductListCreationRequest productListCreationRequest) {
+    public ResponseEntity<ProductList> createList(@RequestBody ProductListCreationRequest productListCreationRequest) {
         try {
             Validator.validateStringNullOrBlank(productListCreationRequest.name);
         } catch (NullOrEmptyArgumentException exception) {
-            return ResponseEntity.badRequest().body("The list name is null or empty");
+            return ResponseEntity.badRequest().build();
         }
-        services.addProductList(productListCreationRequest.name);
-        return ResponseEntity.ok("The list was successfully created!");
+        return ResponseEntity.ok(services.addProductList(productListCreationRequest.name));
     }
 
     @DeleteMapping("/list/{id}")
@@ -85,6 +87,16 @@ public class ProductListController {
         }
         services.deleteProduct(id, name);
         return ResponseEntity.ok(name + " was successfully deleted");
+    }
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductList>> searchProductList(@RequestParam(name = "name") String name){
+        try {
+            Validator.validateStringNullOrBlank(name);
+        } catch (NullOrEmptyArgumentException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+        var searchedLists = services.searchProductList(name);
+        return ResponseEntity.ok(searchedLists);
     }
 
     @PutMapping("/list/{id}/product/{name}")
