@@ -30,9 +30,10 @@ public class ProductListServices {
         repository.updateProductsLists(productList);
     }
 
-    public void addProductList(String name) {
+    public ProductList addProductList(String name) {
         var newProductList = new ProductList(name);
         repository.add(newProductList);
+        return newProductList;
     }
 
     public ProductList findProductList(String id) {
