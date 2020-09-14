@@ -21,7 +21,7 @@ public class ProductList {
 
     private ProductList(String name, String id, ArrayList<Product> listOfProducts) {
         if (id == null) {
-            throw new NullOrEmptyArgumentException(id);
+            throw new NullOrEmptyArgumentException("id");
         }
         setName(name);
         this.id = id;
