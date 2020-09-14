@@ -3,7 +3,6 @@ package src;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static src.ProductList.*;
 
@@ -189,7 +188,7 @@ public class ProductListTest {
 
     @Test
     public void deleteProductList_whenProductListIsValid_shouldDeleteAProductList() {
-        var productToDelete = new Product(1, "pizza", 20.00,true);
+        var productToDelete = new Product(1, "pizza", 20.00, true);
         var productList = new ProductList("my shops");
         productList.addProduct(productToDelete);
 
@@ -239,7 +238,7 @@ public class ProductListTest {
     }
 
     @Test
-    public void editProduct_whenProductNameIsValid_shouldThrowAnException(){
+    public void editProduct_whenProductNameIsValid_shouldThrowAnException() {
         var product = new Product(1, "tomato", 0.90, true);
         var productToEdit = new Product(2, "salad", 1.00, false);
         var productList = new ProductList("list");
@@ -248,22 +247,45 @@ public class ProductListTest {
         productList.editProduct("tomato", product);
         var editedProduct = productList.getProduct(productToEdit.getName());
         assertEquals(productToEdit.getQuantity(), editedProduct.getQuantity());
-        assertEquals(productToEdit.getName(),editedProduct.getName());
+        assertEquals(productToEdit.getName(), editedProduct.getName());
         assertEquals(productToEdit.getPrice(), editedProduct.getPrice());
         assertEquals(productToEdit.getPurchased(), editedProduct.getPurchased());
     }
 
     @Test
-    public void deserializeProductList_whenAStringIsValid_shouldReturnAProductList(){
-        var firstProduct = new Product(2, "beans", 2.00, false);
-        var secondProduct = new Product(3, "pasta", 1.00, false);
+    public void deserializeProductList_whenAStringIsValid_shouldReturnAProductList() {
+        var listString = "ProductList{\n" +
+                "$$name$$#my list#,\n" +
+                "$$id$$#4e9d8936-5707-48e4-a993-be283124859a#,\n" +
+                "$$listOfProducts$$#\n" +
+                "Product{\n" +
+                "%%quantity%%#2#,\n" +
+                "%%name%%#beans#,\n" +
+                "%%price%%#2.0#,\n" +
+                "%%isPurchased%%#false#}}\n" +
+                "Product{\n" +
+                "%%quantity%%#3#,\n" +
+                "%%name%%#pasta#,\n" +
+                "%%price%%#1.0#,\n" +
+                "%%isPurchased%%#false#}}#}}#}}\n" +
+                "ProductList{\n" +
+                "$$name$$#my second list#,\n" +
+                "$$id$$#62052498-f768-465a-9c01-5abc01e879d6#,\n" +
+                "$$listOfProducts$$#\n" +
+                "Product{\n" +
+                "%%quantity%%#2#,\n" +
+                "%%name%%#beans#,\n" +
+                "%%price%%#2.0#,\n" +
+                "%%isPurchased%%#false#}}\n" +
+                "Product{\n" +
+                "%%quantity%%#3#,\n" +
+                "%%name%%#pasta#,\n" +
+                "%%price%%#1.0#,\n" +
+                "%%isPurchased%%#false#}}#}}#}}\n";
+        var deserialized = deserializeListOfProductList(listString);
+        assertEquals("4e9d8936-5707-48e4-a993-be283124859a", deserialized.get(0).getId());
+        assertEquals("beans", deserialized.get(0).getProducts().get(0).getName());
 
-        var products = new ArrayList<Product>();
-        products.add(firstProduct);
-        products.add(secondProduct);
-
-        var firstProductList = new ProductList("my list",products);
-        var serializedProductList
 
     }
 
