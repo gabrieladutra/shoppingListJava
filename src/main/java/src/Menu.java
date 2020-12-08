@@ -3,33 +3,32 @@ package src;
 import java.util.Scanner;
 
 public class Menu {
-    Scanner sc = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
 
     public void display() {
-        System.out.println("Select an option: \n");
-        System.out.println("0-Exit");
-        System.out.println("1-Register a product ");
-        System.out.println("2- List all products ");
-        System.out.println("3- Find a product ");
-        System.out.println("4- Delete a product");
-        System.out.println("5- Alter a product");
-
-
+        System.out.println("Choose an option:");
+        System.out.println("0- Exit");
+        System.out.println("1- Add a new List");
+        System.out.println("2- Search a List");
+        System.out.println("3- Edit a List");
+        System.out.println("4- Delete a List");
+        System.out.println("5- Add a Product in a List");
+        System.out.println("6- Edit a product in a List");
+        System.out.println("7- Delete a Product in a List");
+        System.out.println("8- Recover 3 more accessible lists");
     }
 
     public Integer readOption() {
-        Integer option = sc.nextInt();
-        return option;
+        return scanner.nextInt();
     }
 
     public String readString() {
-        String string = sc.nextLine();
-        return string;
+        return scanner.nextLine();
     }
 
     public Double readDouble() {
-        Double doubleNumber = sc.nextDouble();
-        return doubleNumber;
+        return scanner.nextDouble();
     }
 }
+
 
